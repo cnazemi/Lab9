@@ -70,8 +70,8 @@
 
     // Log
     errorBtns[0].addEventListener('click', () => {
-      let output = document.querySelector('output').value;
-      console.log(output);
+      let output = document.querySelector('output');
+      console.log(output.value);
     });
 
     // Error
@@ -85,40 +85,60 @@
       console.dir(button);
     });
 
-    // Error
+    // dirxml
     errorBtns[3].addEventListener('click', () => {
-
+      console.dirxml(document.body);
     });
 
-    // Error
+    // Group Start
     errorBtns[4].addEventListener('click', () => {
-      
+      console.group("Log Group");
     });
 
-    // Error
+    // Group End
     errorBtns[5].addEventListener('click', () => {
-      
+      console.groupEnd();
     });
 
-     // Log
+     // Table
     errorBtns[6].addEventListener('click', () => {
-      let output = document.querySelector('output').value;
+      console.table([
+        {
+          name: 'Software Engineering',
+          num: '110',
+        },
+        {
+          name: 'Programming Languages',
+          num: '130',
+        },
+        {
+          name: 'Software Engineering',
+          num: '112',
+        }
+      ]);
+
       
     });
 
-    // Error
+    // Start Timer
     errorBtns[7].addEventListener('click', () => {
-      
+      console.time("Run Time");
+      console.log("Timer started!")
     });
 
-    // Error
+    // End Timer
     errorBtns[8].addEventListener('click', () => {
-      
+      console.log("Timer ended!")
+      console.timeEnd("Run Time");
     });
 
-    // Error
+    // Trace
     errorBtns[9].addEventListener('click', () => {
-      
+      const deepest = () => { deeper(); };
+      const deeper = () => { deep(); };
+      const deep = () => { traceTest(); };
+      const traceTest = () => { console.trace("Trace"); };
+      deepest();
     });
 
     // Error
