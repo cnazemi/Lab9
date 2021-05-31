@@ -211,23 +211,29 @@
       
     });
 
-    // 
+    // Trigger a Global Error
     errorBtns[10].addEventListener('click', () => {
-      // let error = new ReferenceError("message");
-      // throw error;
-      // throw new Error("fail");
+ 
 
       window.onerror = function(message, url, line, col, error) {
-        // alert(`${message}\n At ${line}:${col} of ${url}`);
+        console.log("error");
+        TrackJS.track('Testing TrackJS!');
       };
       aintGonnaWork();
       
     });
 
-    
-
-
 
   </script>
+  
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "381a447986454e5f850a2b4be77d67c5"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                          
+
 </body>
 </html>
