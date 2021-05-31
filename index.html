@@ -58,7 +58,7 @@
   <script>
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
-      let output = document.querySelector('output');
+      // let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
@@ -67,11 +67,25 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+    
+
 
     // Log
     errorBtns[0].addEventListener('click', () => {
-      let output = document.querySelector('output');
-      console.log(output.value);
+      try {
+        // ...
+        output = document.querySelector('output');
+      } catch (err) {
+        // ...
+        if (!(err instanceof ReferenceError)) {
+          throw err; // rethrow (don't know how to deal with it)
+        } else {
+          let output = document.querySelector('output');
+        }
+      } finally {
+        console.log(output.value);
+      }
+      
     });
 
     // Error
@@ -79,10 +93,14 @@
       console.error("Error!");
     });
 
+
+   
     // Dir
     errorBtns[2].addEventListener('click', () => {
       let button = document.querySelector('button');
       console.dir(button);
+
+
     });
 
     // dirxml
@@ -100,9 +118,29 @@
       console.groupEnd();
     });
 
+
+    class ReadError extends Error {
+      constructor(message, cause) {
+        super(message);
+        this.cause = cause;
+        this.name = 'ReadError';
+      }
+    }
+    class TableError extends Error { /*...*/ }
+    class PropertyRequiredError extends TableError { /* ... */ }
+
+    function validateTable(table) {
+      if (!table.name) {
+        throw new PropertyRequiredError("name");
+      }
+
+      if (!table.num) {
+        throw new PropertyRequiredError("num");
+      }
+    }
      // Table
     errorBtns[6].addEventListener('click', () => {
-      console.table([
+      let table = [
         {
           name: 'Software Engineering',
           num: '110',
@@ -115,7 +153,22 @@
           name: 'Software Engineering',
           num: '112',
         }
-      ]);
+      ]
+
+    
+
+    try {
+      validateTable(table[0]);
+      validateTable(table[1]);
+      validateTable(table[2]);
+    } catch (err) {
+        if (err instanceof TableError) {
+      throw new ReadError("Table Error", err);
+      } else {
+        throw err;
+      }
+    }
+    console.table(table);
 
       
     });
@@ -134,15 +187,40 @@
 
     // Trace
     errorBtns[9].addEventListener('click', () => {
-      const deepest = () => { deeper(); };
-      const deeper = () => { deep(); };
-      const deep = () => { traceTest(); };
-      const traceTest = () => { console.trace("Trace"); };
-      deepest();
+      let deepest = () => { deeper(); };
+      let deeper = () => { deep(); };
+      let deep = () => { traceTest(); };
+      traceTest = () => { console.trace("Trace"); };
+
+      try {
+        deepest = () => { deeper(); };
+        deeper = () => { deep(); };
+        deep = () => { traceTest(); };
+        traceTest;
+
+      } catch {
+        if (!(err instanceof ReferenceError)) {
+          let traceTest = () => { console.trace("Trace"); };
+        } else {
+          throw err; 
+        }
+      } finally {
+        deepest();
+      }
+      
+      
     });
 
-    // Error
+    // 
     errorBtns[10].addEventListener('click', () => {
+      // let error = new ReferenceError("message");
+      // throw error;
+      // throw new Error("fail");
+
+      window.onerror = function(message, url, line, col, error) {
+        // alert(`${message}\n At ${line}:${col} of ${url}`);
+      };
+      aintGonnaWork();
       
     });
 
